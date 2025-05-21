@@ -3,6 +3,8 @@ from controller import App
 import os
 import base64
 
+from download_models import ensure_models
+ensure_models()
 
 # === Инициализация интерфейса ===
 st.set_page_config(page_title="MITRE ATT&CK Классификация", page_icon="🛡️", layout="centered")

@@ -3,6 +3,7 @@ import numpy as np
 import os
 import re
 from transformers import BertTokenizer, BertForSequenceClassification
+from transformers import BertConfig
 
 
 class Model:
@@ -36,9 +37,14 @@ class Model:
         from pathlib import Path
         path = Path(path).resolve()
         self.tokenizer = BertTokenizer.from_pretrained(str(path), local_files_only=True)
-        self.model = BertForSequenceClassification.from_pretrained(
-            str(path), torch_dtype=torch.float32, local_files_only=True
-        ).to(self.device)
+        try:
+            self.model = BertForSequenceClassification.from_pretrained(
+                str(path),
+                local_files_only=True
+            ).to(self.device)
+        except NotImplementedError as e:
+            print("[!] Ошибка загрузки модели — вероятно, файл весов повреждён или пустой.")
+            raise e
         self.model.eval()
 
         try:

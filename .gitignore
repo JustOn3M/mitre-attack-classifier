@@ -1,6 +1,7 @@
 models/
 *.safetensors
 *.pt
+*.bin
 *.npy
 __pycache__/
-*.log
+venv/
