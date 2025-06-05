@@ -2,8 +2,8 @@ import torch
 import numpy as np
 import os
 import re
-from transformers import BertTokenizer, BertForSequenceClassification
-from transformers import BertConfig
+from pathlib import Path
+from transformers import AutoTokenizer, AutoModelForSequenceClassification
 
 
 class Model:
@@ -19,7 +19,6 @@ class Model:
             'Lateral Movement', 'Persistence', 'Privilege Escalation',
             'Reconnaissance', 'Resource Development'
         ]
-
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.change_model(model_dir)
 
@@ -34,22 +33,25 @@ class Model:
         return models
 
     def change_model(self, path: str):
-        from pathlib import Path
         path = Path(path).resolve()
-        self.tokenizer = BertTokenizer.from_pretrained(str(path), local_files_only=True)
         try:
-            self.model = BertForSequenceClassification.from_pretrained(
-                str(path),
-                local_files_only=True
-            ).to(self.device)
-        except NotImplementedError as e:
+            self.tokenizer = AutoTokenizer.from_pretrained(str(path))
+        except Exception as e:
+            print("[!] Ошибка загрузки токенизатора.")
+            raise e
+
+        try:
+            self.model = AutoModelForSequenceClassification.from_pretrained(str(path)).to(self.device)
+        except Exception as e:
             print("[!] Ошибка загрузки модели — вероятно, файл весов повреждён или пустой.")
             raise e
+
         self.model.eval()
 
         try:
             self.thresholds = np.load(os.path.join(path, "thresholds.npy"))
         except Exception:
+            print("[!] Пороговые значения не найдены, используется 0.5 по умолчанию.")
             self.thresholds = [0.5] * len(self.label_names)
 
     def classify_text(self, text: str) -> list[str]:
@@ -57,7 +59,7 @@ class Model:
         if len(clean_text) < 20 or len(clean_text.split()) < 5:
             return []
 
-        inputs = self.tokenizer(clean_text, return_tensors="pt", truncation=True, padding=True, max_length=128).to(self.device)
+        inputs = self.tokenizer(clean_text, return_tensors="pt", truncation=True, padding=True, max_length=256).to(self.device)
         with torch.no_grad():
             outputs = self.model(**inputs)
             probs = torch.sigmoid(outputs.logits).squeeze().cpu().numpy()
