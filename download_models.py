@@ -5,7 +5,8 @@ from pathlib import Path
 
 # Названия моделей и их Google Drive-ссылки (или ID в виде `uc?id=...`)
 MODELS = {
-    "RoBERTa": "https://drive.google.com/uc?id=1XPvTuMbxVPFSvAEC49oa0Uc8A8KshRk6"
+    "RoBERTa": "https://drive.google.com/uc?id=14gtQQISsYfU1xTTAAzDKmCocyAxrpuJC",
+    "SecRoBERTa": "https://drive.google.com/uc?id=1rae4h35ATnG1nH8r02CheaPagZi4WiI7"
 }
 
 MODELS_DIR = Path(__file__).parent / "models"
