@@ -6,19 +6,19 @@ import base64
 from download_models import ensure_models
 ensure_models()
 
-# === Инициализация интерфейса ===
+# Инициализация интерфейса
 st.set_page_config(page_title="MITRE ATT&CK Классификация", page_icon="🛡️", layout="centered")
 st.markdown("<h1 style='text-align: center;'>🛡️ Классификация кибератак по MITRE ATT&CK</h1>", unsafe_allow_html=True)
 st.markdown("Введите описание кибератаки ниже. Выберите модель, выполните классификацию и при необходимости сохраните результат в формате JSON.")
 
 
-# === Поиск доступных моделей ===
+# Поиск доступных моделей
 def list_available_models():
     models_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "models"))  # путь к ./models относительно корня проекта
     return sorted([f for f in os.listdir(models_path) if os.path.isdir(os.path.join(models_path, f))])
 
 
-# === Класс Interface ===
+# Класс Interface
 class Interface:
     def __init__(self):
         self.models = list_available_models()
@@ -55,7 +55,7 @@ class Interface:
                     st.info("Тактики не обнаружены.")
 
 
-# === Запуск ===
+# Запуск
 if __name__ == "__main__":
     interface = Interface()
     interface.run()

@@ -3,10 +3,10 @@ import gdown
 import zipfile
 from pathlib import Path
 
-# Названия моделей и их Google Drive-ссылки (или ID в виде `uc?id=...`)
+# Названия моделей и их Google Drive-ссылки
 MODELS = {
-    "RoBERTa": "https://drive.google.com/uc?id=1pnedZs2l_nXaiZ3M6yFIwovv5pLY6WpY",
-    "SecRoBERTa": "https://drive.google.com/uc?id=19B5NLbjB6ZEdtOAFoslEK_rK0z7FcOWS"
+    "RoBERTa": "",
+    "SecRoBERTa": ""
 }
 
 MODELS_DIR = Path(__file__).parent / "models"
